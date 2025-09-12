@@ -313,3 +313,18 @@
                 u50))
     )
 )
+
+(define-constant min-reward-score u80)
+(define-constant reward-amount u500)
+(define-public (claim-compliance-reward (sensor-id uint))
+  (let
+    (
+      (sensor-data (unwrap! (map-get? sensors { sensor-id: sensor-id }) err-not-found))
+      (score (unwrap! (calculate-environmental-score sensor-id) err-not-found))
+    )
+    (asserts! (is-eq tx-sender (get owner sensor-data)) err-unauthorized)
+    (asserts! (>= score min-reward-score) err-invalid-input)
+    (try! (ft-mint? compliance-token reward-amount tx-sender))
+    (ok true)
+  )
+)
