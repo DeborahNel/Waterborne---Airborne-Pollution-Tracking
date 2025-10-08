@@ -16,6 +16,7 @@ This smart contract creates an immutable blockchain ledger of pollution data ver
 - 🔒 **Stake-based Sensor Registration**: Operators must stake STX to ensure data integrity
 - 👮 **Role-based Access Control**: Only authorized operators can register and manage sensors
 - 📈 **Environmental Scoring**: Calculate environmental performance scores for locations
+- 🔄 **Dynamic Sensor Updates**: Modify sensor metadata without re-registration
 
 ## 🛠️ Technical Stack
 
@@ -31,6 +32,7 @@ This smart contract creates an immutable blockchain ledger of pollution data ver
 #### Sensor Management
 - `register-sensor(location, sensor-type)` - Register new pollution sensor
 - `deactivate-sensor(sensor-id)` - Deactivate sensor and withdraw stake
+- `update-sensor-info(sensor-id, new-location, new-sensor-type)` - Update sensor location and type
 - `submit-pollution-reading(...)` - Submit sensor readings with auto-violation detection
 
 #### Administration
@@ -96,16 +98,22 @@ clarinet test
 #### 4. Submit Pollution Reading
 ```bash
 # Submit sensor data (pH as 7.2, DO as 8.5 mg/L, PM2.5 as 25 µg/m³, etc.)
-(contract-call? .pollution-tracker submit-pollution-reading 
+(contract-call? .pollution-tracker submit-pollution-reading
     u1          ; sensor-id
     u720        ; water-pH (7.20)
-    u850        ; dissolved-oxygen (8.50 mg/L) 
+    u850        ; dissolved-oxygen (8.50 mg/L)
     u2500       ; air-PM2.5 (25.00 µg/m³)
     u4000       ; air-PM10 (40.00 µg/m³)
     u38000      ; air-CO2 (380.00 ppm)
     u2500       ; temperature (25.00°C)
     u6500       ; humidity (65.00%)
 )
+```
+
+#### 5. Update Sensor Information
+```bash
+# Operator updates sensor location and type
+(contract-call? .pollution-tracker update-sensor-info u1 "New Downtown River, Sector 8" "advanced-water-quality")
 ```
 
 ## 📊 Data Format

@@ -328,3 +328,15 @@
     (ok true)
   )
 )
+(define-public (update-sensor-info (sensor-id uint) (new-location (string-ascii 100)) (new-sensor-type (string-ascii 50)))
+  (let
+    ((sensor-data (unwrap! (map-get? sensors { sensor-id: sensor-id }) err-not-found)))
+    (asserts! (is-eq tx-sender (get owner sensor-data)) err-unauthorized)
+    (asserts! (get is-active sensor-data) err-sensor-inactive)
+    (map-set sensors
+      { sensor-id: sensor-id }
+      (merge sensor-data { location: new-location, sensor-type: new-sensor-type })
+    )
+    (ok true)
+  )
+)
