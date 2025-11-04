@@ -16,6 +16,7 @@ This smart contract creates an immutable blockchain ledger of pollution data ver
 - 🔒 **Stake-based Sensor Registration**: Operators must stake STX to ensure data integrity
 - 👮 **Role-based Access Control**: Only authorized operators can register and manage sensors
 - 📈 **Environmental Scoring**: Calculate environmental performance scores for locations
+- 🔄 **Sensor Ownership Transfer**: Seamlessly transfer sensor ownership between authorized operators
 - 🔄 **Dynamic Sensor Updates**: Modify sensor metadata without re-registration
 
 ## 🛠️ Technical Stack
@@ -32,6 +33,7 @@ This smart contract creates an immutable blockchain ledger of pollution data ver
 #### Sensor Management
 - `register-sensor(location, sensor-type)` - Register new pollution sensor
 - `deactivate-sensor(sensor-id)` - Deactivate sensor and withdraw stake
+- `transfer-sensor-ownership(sensor-id, new-owner)` - Transfer sensor ownership to another authorized operator
 - `update-sensor-info(sensor-id, new-location, new-sensor-type)` - Update sensor location and type
 - `submit-pollution-reading(...)` - Submit sensor readings with auto-violation detection
 
@@ -111,6 +113,11 @@ clarinet test
 ```
 
 #### 5. Update Sensor Information
+#### 6. Transfer Sensor Ownership
+```bash
+# Current owner transfers sensor to another authorized operator
+(contract-call? .pollution-tracker transfer-sensor-ownership u1 'SP2EFGH...)
+```
 ```bash
 # Operator updates sensor location and type
 (contract-call? .pollution-tracker update-sensor-info u1 "New Downtown River, Sector 8" "advanced-water-quality")
@@ -135,6 +142,7 @@ clarinet test
 - **CO2**: ≤ 400 ppm
 
 ## 🏆 Token Economics
+- Sensor ownership transfer capabilities
 
 - **Stake Requirement**: 10,000 µSTX per sensor
 - **Penalty Rate**: 1,000 compliance tokens per violation

@@ -340,3 +340,13 @@
     (ok true)
   )
 )
+
+(define-public (transfer-sensor-ownership (sensor-id uint) (new-owner principal))
+  (let
+    ((sensor-data (unwrap! (map-get? sensors { sensor-id: sensor-id }) err-not-found)))
+    (asserts! (is-eq tx-sender (get owner sensor-data)) err-unauthorized)
+    (asserts! (is-authorized-operator new-owner) err-unauthorized)
+    (map-set sensors { sensor-id: sensor-id } (merge sensor-data { owner: new-owner }))
+    (ok true)
+  )
+)
