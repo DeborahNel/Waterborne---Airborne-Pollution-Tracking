@@ -18,6 +18,7 @@ This smart contract creates an immutable blockchain ledger of pollution data ver
 - 📈 **Environmental Scoring**: Calculate environmental performance scores for locations
 - 🔄 **Sensor Ownership Transfer**: Seamlessly transfer sensor ownership between authorized operators
 - 🔄 **Dynamic Sensor Updates**: Modify sensor metadata without re-registration
+- 🔧 **Sensor Maintenance Tracking**: Log and track sensor maintenance activities for improved reliability
 
 ## 🛠️ Technical Stack
 
@@ -35,6 +36,7 @@ This smart contract creates an immutable blockchain ledger of pollution data ver
 - `deactivate-sensor(sensor-id)` - Deactivate sensor and withdraw stake
 - `transfer-sensor-ownership(sensor-id, new-owner)` - Transfer sensor ownership to another authorized operator
 - `update-sensor-info(sensor-id, new-location, new-sensor-type)` - Update sensor location and type
+- `log-sensor-maintenance(sensor-id)` - Log maintenance activity for a sensor
 - `submit-pollution-reading(...)` - Submit sensor readings with auto-violation detection
 
 #### Administration
@@ -50,6 +52,7 @@ This smart contract creates an immutable blockchain ledger of pollution data ver
 - `get-pollution-reading(sensor-id, timestamp)` - Get specific reading
 - `get-compliance-threshold(pollution-type)` - Get threshold values
 - `calculate-environmental-score(sensor-id)` - Calculate performance score
+- `get-sensor-maintenance(sensor-id)` - Retrieve maintenance information for a sensor
 - `is-authorized-operator(operator)` - Check operator authorization
 
 ## 🚀 Getting Started

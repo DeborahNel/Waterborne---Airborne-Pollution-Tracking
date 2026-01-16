@@ -54,6 +54,16 @@
     { violation-count: uint, total-penalty: uint }
 )
 
+(define-data-var next-maintenance-id uint u1)
+
+(define-map sensor-maintenance
+    { sensor-id: uint }
+    {
+        last-maintenance-date: uint,
+        maintenance-count: uint
+    }
+)
+
 (define-read-only (get-sensor (sensor-id uint))
     (map-get? sensors { sensor-id: sensor-id })
 )
@@ -72,6 +82,10 @@
 
 (define-read-only (get-daily-violations (sensor-id uint) (date uint))
     (map-get? daily-violations { sensor-id: sensor-id, date: date })
+)
+
+(define-read-only (get-sensor-maintenance (sensor-id uint))
+    (map-get? sensor-maintenance { sensor-id: sensor-id })
 )
 
 (define-read-only (is-authorized-operator (operator principal))
@@ -349,4 +363,23 @@
     (map-set sensors { sensor-id: sensor-id } (merge sensor-data { owner: new-owner }))
     (ok true)
   )
+)
+
+(define-public (log-sensor-maintenance (sensor-id uint))
+    (let
+        (
+            (sensor-data (unwrap! (map-get? sensors { sensor-id: sensor-id }) err-not-found))
+            (current-maintenance (default-to { last-maintenance-date: u0, maintenance-count: u0 } (map-get? sensor-maintenance { sensor-id: sensor-id })))
+        )
+        (asserts! (is-eq tx-sender (get owner sensor-data)) err-unauthorized)
+        (asserts! (get is-active sensor-data) err-sensor-inactive)
+        (map-set sensor-maintenance
+            { sensor-id: sensor-id }
+            {
+                last-maintenance-date: stacks-block-height,
+                maintenance-count: (+ (get maintenance-count current-maintenance) u1)
+            }
+        )
+        (ok true)
+    )
 )
